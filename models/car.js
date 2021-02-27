@@ -11,14 +11,16 @@ class CarModel {
         return Car.findOne({"_id" : ObjectId(`${id}`)})
     }
 
-
     static create(payload){
         return Car.insertOne(payload)
     }
 
     static update(id, payload){
-        const { title, overview, poster_path, popularity, tags } = payload
-        return Car.updateOne({"_id" : ObjectId(`${id}`)}, {$set: {"title":title, "overview":overview, "poster_path":poster_path, "popularity":popularity, "tags":tags}})
+        return Car.findOneAndUpdate(
+          { _id: ObjectId(id) },
+          { $set: payload },
+          { returnOriginal: false }
+        );            
     }
 
     static delete(id){

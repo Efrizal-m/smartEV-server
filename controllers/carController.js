@@ -23,8 +23,8 @@ class CarController {
     }
 
     static create(req, res, next) {
-        const { title, overview, poster_path, popularity, tags } = req.body
-        const payload = { title, overview, poster_path, popularity, tags }
+        const { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
+        const payload = { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price }
 
         Car.create(payload)
         .then(result => {
@@ -38,13 +38,13 @@ class CarController {
 
     static update(req, res, next) {
         const { id } = req.params
-        const { title, overview, poster_path, popularity, tags } = req.body
-        const payload = { title, overview, poster_path, popularity, tags }
+        const { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
+        const payload = { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price }
 
         Car.update(id, payload)
         .then(result => {
             res.status(200)
-            res.send({message:'success to update'})
+            res.send(result.value)
         })
         .catch(error => {
             console.log(error);
@@ -55,7 +55,7 @@ class CarController {
         const { id } = req.params
         Car.delete(id)
         .then(result => {
-            res.send({message:'succes to delete'})
+            res.send({message:'Succes to delete'})
         })
         .catch(error => {
             console.log(error);
