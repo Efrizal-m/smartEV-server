@@ -7,7 +7,8 @@ class CarController {
         try {
             const cars = await Car.find()
             if (cars) {
-                res.send(cars)            
+                res.status(200)
+                res.send({cars})            
             } else {
                 throw(error);            
             }            
@@ -21,7 +22,8 @@ class CarController {
             const { id } = req.params
             const car = await Car.findOne(id)
             if (car) {
-                res.send(result)            
+                res.status(200)
+                res.send({car})            
             } else {
                 throw(error);            
             }            
@@ -34,12 +36,11 @@ class CarController {
         try {
             const file = req.files[0]
             const url = await imgur.uploadFile(`../data/uploads/${file.filename}`)
-            const imageUrl = url.data.link
+            const image = url.data.link
 
-            const { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
-            const payload = { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price, imageUrl }
-    
-            const result = Car.create(payload)
+            const { name, overview, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
+            const payload = { name, overview, battery, acceleration, topSpeed, range, efficiency, fastCharge, price, image }
+            const result = await Car.create(payload)
             if (result) {
                 res.status(201)
                 res.send(result.ops[0])
@@ -57,15 +58,14 @@ class CarController {
             const { id } = req.params
             const file = req.files[0]
             const url = await imgur.uploadFile(`../data/uploads/${file.filename}`)
-            const imageUrl = url.data.link
+            const image = url.data.link
 
-            const { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
-            const payload = { name, battery, acceleration, topSpeed, range, efficiency, fastCharge, price, imageUrl }
-    
-            const result = Car.update(id, payload)
+            const { name, overview, battery, acceleration, topSpeed, range, efficiency, fastCharge, price } = req.body
+            const payload = { name, overview, battery, acceleration, topSpeed, range, efficiency, fastCharge, price, image }
+            const result = await Car.create(payload)
             if (result) {
-                res.status(200)
-                res.send(result.value)
+                res.status(201)
+                res.send(result.ops[0])
                 fs.unlinkSync(`../data/uploads/${file.filename}`)
             } else {
                 throw(error)
@@ -78,7 +78,8 @@ class CarController {
     static async delete(req, res, next) {
         try {
             const { id } = req.params
-            await Car.delete(id)            
+            await Car.delete(id)
+            res.status(200)            
             res.send({message:'Succes to delete'})
         } catch (error) {
             console.log(error);
